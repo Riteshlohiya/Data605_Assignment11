@@ -1,0 +1,81 @@
+---
+title: "RLohiya Assignment 11"
+author: "Ritesh Lohiya"
+date: "November 9, 2018"
+output: html_document
+---
+
+#                             ASSIGNMENT 8
+
+#           IS 605 FUNDAMENTALS OF COMPUTATIONAL MATHEMATICS
+
+Using the "cars" dataset in R, build a linear model for stopping distance as a function of speed and replicate the analysis of your textbook chapter 3 (visualization, quality evaluation of the model, and residual analysis.)
+
+
+```{r}
+#Lets see summary of the data
+summary(cars)
+colnames(cars)
+nrow(cars)
+```
+
+We can see that dataset has 2 columns and 50 rows.
+
+```{r}
+#Print the data
+cars
+```
+
+```{r}
+#Correlation
+cor(cars$dist,cars$speed)
+```
+
+```{r}
+#Plot the spread
+plot(x = cars$speed, y = cars$dist, main="Cars Data", xlab = "Speed(mph)", ylab = "Distance(feet)")
+```
+
+We can see as speed increases distance is also increasing, we can safely assume that distance is a function of speed.
+
+# Linear Model
+
+```{r}
+cars_model <- lm(cars$dist ~ cars$speed)
+summary(cars_model)
+```
+
+Summary:  R-squared for the model is  .6511, so model explains around 65% of the variation in distance due to speed. Also the standard error is very less compared to the coefficients(around 10 times) which is good for the model.
+
+```{r}
+plot(cars$speed, cars$dist, xlab = "Speed (mph)", ylab = "Distance (feet)",main="Speed vsStopping Distance")
+abline(cars_model)
+```
+
+The regression line will be : 
+
+distance = -17.5791 + 3.9324 * speed
+
+# Residuals
+
+```{r}
+summary(residuals(cars_model))
+```
+
+The mean is equal to zero, so that looks good.
+
+```{r}
+plot(cars_model$residuals ~ cars$speed, xlab='Fitted Values', ylab='Residuals',main="Speed vs Linear Model Residuals")
+abline(h=0, lty=3)
+```
+
+```{r}
+qqnorm(cars_model$residuals)
+qqline(cars_model$residuals)
+```
+
+Seeing the residual plot, we can see there is constant variability and no pattern. Q-Q plot also looks good with some outliers at the tails.
+
+
+
+
